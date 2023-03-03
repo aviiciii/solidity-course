@@ -7,6 +7,28 @@ contract SimpleStorage{
     // intialise
     uint256 favoriteNumber;
 
+    // create struct 
+    struct People{
+        uint256 favoriteNumber;
+        string name;
+    }
+
+    // initialise dynamic array of struct people
+    People[] public people;
+
+    // mapping name to fav number
+    mapping(string => uint256) public nameToFavoriteNumber;
+
+    // add people to array
+    function addPerson(string memory _name, uint256 _favoriteNumber) public {
+        // add to array
+        people.push(People(_favoriteNumber, _name));
+
+        // add to mapping
+        nameToFavoriteNumber[_name] = _favoriteNumber;
+
+    }
+
 
     // store function
     function store(uint256 _favoriteNumber) public {
@@ -18,8 +40,5 @@ contract SimpleStorage{
         return favoriteNumber;
     }
 
-    //
-    function add() public view returns(uint256){
-        return favoriteNumber + favoriteNumber;
-    }
+    
 }
