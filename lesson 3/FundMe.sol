@@ -33,4 +33,11 @@ contract FundMe{
         return uint256(answer * 10000000000);
     }
 
+    // for wei
+    function get_conversion_rate(uint256 eth_amt) public view returns(uint256){
+        uint256 eth_price = get_price();
+        uint usd_amt = (eth_amt * eth_price) / 1000000000000000000;
+        return usd_amt;
+    }
+    // .000001568396100000
 }
