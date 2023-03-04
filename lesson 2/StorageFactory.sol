@@ -16,6 +16,13 @@ contract StorageFactory{
         storage_array.push(new_storage);
     }
 
-    
+    function add_fav(uint256 array_index, uint256 favorite_number) public {
+        // get the storage using address in the array
+        SimpleStorage the_storage = SimpleStorage(address(storage_array[array_index]));
+
+        // call the store function to save favourite number 
+        the_storage.store(favorite_number); 
+
+    }
 
 }
