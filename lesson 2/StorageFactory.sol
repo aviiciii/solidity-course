@@ -25,4 +25,12 @@ contract StorageFactory{
 
     }
 
+    function show_fav(uint256 array_index) view public returns(uint256) {
+        // get the storage using address in the array
+        SimpleStorage the_storage = SimpleStorage(address(storage_array[array_index]));
+
+        // call retrieve function to show fav num
+        return the_storage.retrieve();
+    }
+
 }
