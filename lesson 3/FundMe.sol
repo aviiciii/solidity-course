@@ -19,6 +19,9 @@ contract FundMe{
     // saves the address of the person who sent the money and the amount of money they sent
     mapping(address => uint256) public transactions;
 
+    // saves addresses of people funded currently
+    address[] public funders;
+
     // function to send money to the contract
     function fund() public payable{
         // crete minimum of $10 for transaction in wei 
@@ -29,6 +32,7 @@ contract FundMe{
 
         // add log of transactions
         transactions[msg.sender] += msg.value;
+        funders.push(msg.sender);
     }
 
     modifier only_owner() {
@@ -39,6 +43,18 @@ contract FundMe{
     function withdraw()  payable only_owner public{
         require(msg.sender == owner);
         msg.sender.transfer(address(this).balance);
+
+        // clear transaction history
+        for (uint256 i = 0; i < funders.length; i++){
+            // set transaction to 0
+            transactions[address(funders[i])] = 0;
+        }
+
+        // clear funders array
+
+        funders = new address[](0);
+
+
     }
 
     function get_version() public view returns(uint256){
