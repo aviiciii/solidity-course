@@ -14,14 +14,18 @@ contract FundMe{
 
     // function to send money to the contract
     function fund() public payable{
-            // crete minimum of $10 for transaction in wei 
-            uint256 minimum_amount = 10 * (10 ** 18);
-            
-            // check minimum
-            require (get_conversion_rate(msg.value) >= minimum_amount, "Minimum amount is $10 buddy!");
+        // crete minimum of $10 for transaction in wei 
+        uint256 minimum_amount = 10 * (10 ** 18);
+        
+        // check minimum
+        require (get_conversion_rate(msg.value) >= minimum_amount, "Minimum amount is $10 buddy!");
 
-            // add log of transactions
-            transactions[msg.sender] += msg.value;
+        // add log of transactions
+        transactions[msg.sender] += msg.value;
+    }
+
+    function withdraw() public payable{
+        msg.sender.transfer(address(this).balance);
     }
 
     function get_version() public view returns(uint256){
