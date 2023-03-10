@@ -9,6 +9,13 @@ import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe{
 
+
+    address public owner;
+
+    constructor() public {
+        owner = msg.sender;
+    }
+
     // saves the address of the person who sent the money and the amount of money they sent
     mapping(address => uint256) public transactions;
 
@@ -25,6 +32,7 @@ contract FundMe{
     }
 
     function withdraw() public payable{
+        require(msg.sender == owner);
         msg.sender.transfer(address(this).balance);
     }
 
