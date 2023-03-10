@@ -9,12 +9,52 @@ import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe{
 
+
+    address public owner;
+
+    constructor() public {
+        owner = msg.sender;
+    }
+
     // saves the address of the person who sent the money and the amount of money they sent
     mapping(address => uint256) public transactions;
 
+    // saves addresses of people funded currently
+    address[] public funders;
+
     // function to send money to the contract
     function fund() public payable{
-           transactions[msg.sender] += msg.value;
+        // crete minimum of $10 for transaction in wei 
+        uint256 minimum_amount = 10 * (10 ** 18);
+        
+        // check minimum
+        require (get_conversion_rate(msg.value) >= minimum_amount, "Minimum amount is $10 buddy!");
+
+        // add log of transactions
+        transactions[msg.sender] += msg.value;
+        funders.push(msg.sender);
+    }
+
+    modifier only_owner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function withdraw()  payable only_owner public{
+        require(msg.sender == owner);
+        msg.sender.transfer(address(this).balance);
+
+        // clear transaction history
+        for (uint256 i = 0; i < funders.length; i++){
+            // set transaction to 0
+            transactions[address(funders[i])] = 0;
+        }
+
+        // clear funders array
+
+        funders = new address[](0);
+
+
     }
 
     function get_version() public view returns(uint256){
