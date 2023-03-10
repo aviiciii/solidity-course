@@ -31,7 +31,12 @@ contract FundMe{
         transactions[msg.sender] += msg.value;
     }
 
-    function withdraw() public payable{
+    modifier only_owner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function withdraw()  payable only_owner public{
         require(msg.sender == owner);
         msg.sender.transfer(address(this).balance);
     }
